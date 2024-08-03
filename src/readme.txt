@@ -21,6 +21,9 @@ $ npm i morgan //morgan nos permite ver por consola las peticiones que van llega
 
 $ npm install mongoose //mongoose es un modulo que nos permite conectarnos a mongo db pero también modelar los datos. Decirle a mongo db que valide antes de guardar los daots.
 
+$ npm i bcryptjs  //Permite encriptar datos como contraseñas
+
+$ npm i jsonwebtoken //Autenticación de datos
 
 ------------------------------------------------------------------------------------------------------
 DATA BASE CONNECTION
