@@ -25,6 +25,8 @@ $ npm i bcryptjs  //Permite encriptar datos como contraseñas
 
 $ npm i jsonwebtoken //Autenticación de datos
 
+$ npm i cookie-parser //Leer cookies y convertirlas en objetos json
+
 ------------------------------------------------------------------------------------------------------
 DATA BASE CONNECTION
 La conección se crea en db.js y se ejecuta en index.js

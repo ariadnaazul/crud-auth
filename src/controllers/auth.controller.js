@@ -3,13 +3,6 @@ import bcrypt from 'bcryptjs'; //encripta datos
 import { createAccessToken } from '../libs/jwt.js';
 
 
-
-/*Funciones
-    request
-    response
-*/
-
-
 export const register = async (req, res) => {
     const { email, password, username } = req.body; //hace un request sobre el cuerpo del metodo post y obtiene los campos solicitados
 
@@ -40,4 +33,49 @@ export const register = async (req, res) => {
     }
 };
 
-export const login = (req, res) => res.send('login'); 
+export const login = async (req, res) => {
+    const { email, password } = req.body; //hace un request sobre el cuerpo del metodo post y obtiene los campos solicitados
+
+    try {
+
+        //Revision
+        const userFound = await User.findOne({ email });
+        if (!userFound) return res.status(400).json({message: "User not found"});  
+
+        //Validacion
+        const isMatch = await bcrypt.compare(password, userFound.password); //Compara ambos datos
+        if (!isMatch) return res.status(400).json({ message: "Incorrect password" });
+
+
+        const token = await createAccessToken({ id: userFound._id }) //Crea un token con el _id
+
+        res.cookie('token', token); //Se crea un cookie para almacenar el token
+        res.json({
+            id: userFound._id,
+            username: userFound.username,
+            email: userFound.email,
+        });//Devuelve los datos especificados como respuesta al front
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const logout = (req, res) => {
+    res.cookie('token', "", {
+        expires: new Date (0)
+    });
+    return res.sendStatus(200);
+}
+
+export const profile = async (req, res) => {
+    const userFound = await User.findById(req.user.id);
+    if(!userFound) return res.status(400).json({ message: "User not found" });
+    return res.json({
+        id: userFound._id,
+        username: userFound.username, 
+        email: userFound.email,
+
+    })
+    res.send('profile');
+}
